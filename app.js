@@ -1,5 +1,6 @@
 //using express
 const express = require('express');
+const dotenv = require('dotenv');
 const { create, result } = require('lodash');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -9,13 +10,18 @@ const blogRoutes = require('./routes/blogRoutes')
 //express app
 const app = express();
 
+//setting up dynamic port
+dotenv.config({path:'config.env'})
+const PORT = process.env.PORT || 3000
+
 //connect to db
 const dbURI = 'mongodb+srv://blog:blog321@cluster0.6zhde.mongodb.net/nodeNinja?retryWrites=true&w=majority';
 
 mongoose.connect(dbURI)
     .then((result) => {
         console.log('connected to db');
-        app.listen(3000); // listen to req once db connection is established
+        app.listen(PORT, ()=> { console.log(`Server is running on http://localhost:${PORT}`)});
+        // listen to req once db connection is established
     })
     .catch((err) => console.log(err));
 
